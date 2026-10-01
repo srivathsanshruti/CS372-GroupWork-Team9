@@ -1,0 +1,12 @@
+{
+  "name": "groupwork-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Group Work backend database setup",
+  "scripts": {
+    "db:init": "node initDb.js"
+  },
+  "dependencies": {
+    "sqlite3": "^6.0.1"
+  }
+}
