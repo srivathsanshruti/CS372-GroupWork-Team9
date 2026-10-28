@@ -2,11 +2,21 @@
   "name": "groupwork-server",
   "version": "1.0.0",
   "private": true,
-  "description": "Group Work backend database setup",
+  "description": "Group Work personal habits and progress API",
   "scripts": {
-    "db:init": "node initDb.js"
+    "db:init": "node initDb.js",
+    "start": "node index.js",
+    "test": "jest --runInBand"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "express-session": "^1.19.0",
     "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "jest": "^30.5.2",
+    "supertest": "^7.3.1"
   }
 }

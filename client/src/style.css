@@ -1,0 +1,112 @@
+.personal-app {
+  --ink: #24282e;
+  --muted: #69717a;
+  --line: #dedfdf;
+  --accent: #285aa0;
+  min-height: 100vh;
+  background: #fafaf8;
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  --bs-primary: #285aa0;
+}
+.personal-app * { box-sizing: border-box; }
+.personal-app .page-width { max-width: 1120px; margin: 0 auto; padding-left: 28px; padding-right: 28px; }
+.personal-app .app-header { background: #fff; border-bottom: 1px solid var(--line); }
+.personal-app .header-inner { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.personal-app .wordmark { color: var(--ink); font-size: 23px; font-weight: 700; letter-spacing: -.7px; text-decoration: none; }
+.personal-app .wordmark-dot { color: var(--accent); }
+.personal-app .account-name { font-size: 14px; color: var(--muted); }
+.personal-app .personal-nav { display: flex; gap: 28px; border-bottom: 1px solid var(--line); padding-top: 20px; }
+.personal-app .personal-nav button { padding: 12px 0; border: 0; border-bottom: 2px solid transparent; background: transparent; font-size: 14px; color: var(--muted); }
+.personal-app .personal-nav button.current { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+.personal-app .page-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 32px 0 26px; }
+.personal-app .page-date { color: var(--muted); font-size: 13px; margin: 0 0 8px; }
+.personal-app h1 { font-size: 30px; letter-spacing: -.7px; font-weight: 650; margin: 0; }
+.personal-app h2 { font-size: 17px; font-weight: 650; margin: 0; }
+.personal-app h3 { font-size: 16px; font-weight: 600; }
+.personal-app p { line-height: 1.6; }
+.personal-app .btn { border-radius: 4px; font-size: 14px; padding: 9px 15px; }
+.personal-app .btn-primary { --bs-btn-bg: #285aa0; --bs-btn-border-color: #285aa0; --bs-btn-hover-bg: #204a84; --bs-btn-hover-border-color: #204a84; --bs-btn-disabled-bg: #285aa0; --bs-btn-disabled-border-color: #285aa0; }
+.personal-app .btn-link, .personal-app .text-button { color: var(--accent); }
+.personal-app .text-button { border: 0; background: none; padding: 3px 0; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.personal-app .text-button:disabled { color: var(--muted); }
+.personal-app .danger-text { color: #9c3a34; }
+.personal-app .section-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; }
+.personal-app .count-label, .personal-app .schedule-label { font-size: 13px; color: var(--muted); }
+.personal-app .today-section { background: #fff; border: 1px solid var(--line); border-radius: 5px; padding: 22px 24px 6px; margin-bottom: 34px; }
+.personal-app .today-list { list-style: none; padding: 0; margin: 0; }
+.personal-app .today-list li { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 17px 0; border-top: 1px solid #ededeb; }
+.personal-app .checkin { display: flex; align-items: flex-start; gap: 13px; cursor: pointer; }
+.personal-app .checkin input { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; accent-color: var(--accent); }
+.personal-app .checkin strong { font-weight: 550; }
+.personal-app .checked strong { color: var(--muted); text-decoration: line-through; }
+.personal-app .habit-goal { display: block; color: var(--muted); font-size: 13px; font-weight: 400; margin-top: 4px; overflow-wrap: anywhere; }
+.personal-app .habit-name { display: block; font-weight: 550; overflow-wrap: anywhere; }
+.personal-app .table { --bs-table-bg: transparent; --bs-table-color: var(--ink); --bs-table-border-color: var(--line); font-size: 14px; margin-bottom: 0; }
+.personal-app .table td, .personal-app .table th { padding: 17px 12px; vertical-align: middle; }
+.personal-app .table th:first-child, .personal-app .table td:first-child { padding-left: 0; }
+.personal-app .table th:last-child, .personal-app .table td:last-child { padding-right: 0; }
+.personal-app .table thead th { font-size: 12px; font-weight: 500; color: var(--muted); padding-top: 8px; padding-bottom: 12px; }
+.personal-app .table tbody th { font-weight: 500; }
+.personal-app .date-cell { white-space: nowrap; color: var(--muted); }
+.personal-app .row-actions { display: flex; gap: 16px; justify-content: flex-end; }
+.personal-app .habits-layout.with-editor { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 30px; align-items: start; }
+.personal-app .habit-editor { background: #fff; border: 1px solid var(--line); border-radius: 5px; padding: 22px; }
+.personal-app .form-label { font-size: 13px; font-weight: 550; }
+.personal-app .form-control, .personal-app .form-select { font-size: 14px; border-radius: 4px; border-color: #c8ccd0; }
+.personal-app .form-control:focus, .personal-app .form-select:focus { box-shadow: 0 0 0 2px #285aa025; border-color: var(--accent); }
+.personal-app .field-note, .personal-app .calculation-note { color: var(--muted); font-size: 12px; line-height: 1.7; margin: 12px 0 22px; }
+.personal-app .calculation-note { max-width: 680px; margin-top: 24px; }
+.personal-app .report-toolbar { display: flex; justify-content: space-between; gap: 20px; align-items: center; margin-bottom: 26px; }
+.personal-app .report-toolbar p { margin: 0; }
+.personal-app .report-toolbar select { min-width: 140px; }
+.personal-app .progress-summary { display: flex; align-items: center; gap: 32px; padding: 28px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.personal-app .overall-value { font-size: 52px; font-weight: 600; letter-spacing: -2px; font-variant-numeric: tabular-nums; min-width: 130px; }
+.personal-app .overall-value span { font-size: 25px; margin-left: 3px; color: var(--muted); }
+.personal-app .progress-summary > div:last-child { width: min(100%, 440px); }
+.personal-app .progress-summary p { color: var(--muted); font-size: 13px; margin: 8px 0 12px; }
+.personal-app .progress { height: 6px; border-radius: 1px; background: #e6e8eb; }
+.personal-app .progress-bar { background: var(--accent); }
+.personal-app .rate-cell { display: flex; gap: 16px; align-items: center; font-variant-numeric: tabular-nums; }
+.personal-app .rate-cell .progress { flex: 1; min-width: 60px; }
+.personal-app .rate-cell > span { min-width: 38px; text-align: right; }
+.personal-app .progress-table th:first-child { width: 40%; }
+.personal-app .history-filter { display: flex; gap: 14px; align-items: center; margin: 0 0 18px; }
+.personal-app .history-filter label { margin: 0; white-space: nowrap; }
+.personal-app .history-filter select { width: auto; max-width: 300px; }
+.personal-app .completion-editor { border-top: 1px solid var(--line); padding-top: 26px; margin-top: 36px; }
+.personal-app .completion-editor .field-note { margin-bottom: 10px; }
+.personal-app .delete-confirm { margin-top: 24px; padding: 20px; border-left: 3px solid #a8433b; background: #fff4f2; }
+.personal-app .delete-confirm p { font-size: 13px; }
+.personal-app .feedback { border-left: 3px solid; padding: 12px 16px; margin-bottom: 22px; font-size: 14px; }
+.personal-app .success { border-color: #347052; background: #edf5ee; }
+.personal-app .failure { border-color: #a8433b; background: #fff2f0; }
+.personal-app .muted, .personal-app .empty-copy, .personal-app .loading-state { color: var(--muted); font-size: 14px; }
+.personal-app .empty-copy { padding: 14px 0; }
+.personal-app .empty-state { padding: 35px 0; border-top: 1px solid var(--line); }
+.personal-app .empty-state p, .personal-app .signed-out p { color: var(--muted); }
+.personal-app .signed-out { padding: 35px 0; border-top: 1px solid var(--line); }
+.personal-app .signed-out h2 { margin-bottom: 12px; }
+.personal-app .workspace { padding-bottom: 65px; }
+@media (max-width: 900px) {
+  .personal-app .habits-layout.with-editor { grid-template-columns: 1fr; }
+  .personal-app .habit-editor { grid-row: 1; }
+}
+@media (max-width: 600px) {
+  .personal-app .page-width { padding-left: 18px; padding-right: 18px; }
+  .personal-app .page-heading { gap: 12px; }
+  .personal-app h1 { font-size: 25px; }
+  .personal-app .today-section { padding-left: 16px; padding-right: 16px; }
+  .personal-app .habit-table { min-width: 610px; }
+  .personal-app .progress-summary { gap: 18px; }
+  .personal-app .overall-value { min-width: 95px; font-size: 40px; }
+  .personal-app .report-toolbar { align-items: flex-start; }
+  .personal-app .report-toolbar p { font-size: 13px; }
+}
+
+.personal-app .auth-page { max-width: 410px; margin: 65px auto; padding: 0 24px 40px; }
+.personal-app .auth-page h1 { margin-bottom: 12px; }
+.personal-app .auth-page > p { margin-bottom: 28px; }
+.personal-app .auth-switch { text-align: center; font-size: 14px; margin-top: 24px; }
+.personal-app .account-controls { display: flex; align-items: center; gap: 20px; }

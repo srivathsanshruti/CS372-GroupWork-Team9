@@ -77,3 +77,11 @@ CREATE INDEX IF NOT EXISTS idx_encouragement_messages_user ON encouragement_mess
 CREATE INDEX IF NOT EXISTS idx_events_group ON events(group_id);
 CREATE INDEX IF NOT EXISTS idx_events_organizer ON events(organizer_id);
 CREATE INDEX IF NOT EXISTS idx_rsvps_user ON rsvps(user_id);
+
+-- Server-side sessions; the browser stores only a signed opaque ID.
+CREATE TABLE IF NOT EXISTS auth_sessions (
+  sid TEXT PRIMARY KEY,
+  data TEXT NOT NULL,
+  expires_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_expiry ON auth_sessions(expires_at);

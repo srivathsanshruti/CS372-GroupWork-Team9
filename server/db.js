@@ -5,10 +5,10 @@ const sqlite3 = require('sqlite3');
 const databasePath = path.join(__dirname, 'database', 'groupwork.db');
 
 // Resolve only after foreign-key enforcement is enabled on this connection.
-function openDatabase() {
-  fs.mkdirSync(path.dirname(databasePath), { recursive: true });
+function openDatabase(filePath = databasePath) {
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   return new Promise((resolve, reject) => {
-    const db = new sqlite3.Database(databasePath, (error) => {
+    const db = new sqlite3.Database(filePath, (error) => {
       if (error) return reject(error);
       db.configure('busyTimeout', 5000);
       db.exec('PRAGMA foreign_keys = ON;', (pragmaError) => {

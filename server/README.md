@@ -7,12 +7,12 @@ npm ci
 npm run db:init
 ```
 
-This creates `database/groupwork.db` with eight tables. Each teammate uses their
+This creates `database/groupwork.db` with eight product tables and an auth_sessions table. Each teammate uses their
 own local database; database files and dependencies are ignored by Git.
 Initialization can be repeated without deleting data. It creates missing tables
 and indexes, but does not migrate existing table definitions.
 
-Use the connection helper in future Express code:
+Use the shared connection helper in Express code:
 
 ```js
 const { openDatabase } = require('./db');
@@ -28,9 +28,8 @@ status defaults to `active`. RSVP status is restricted to `attending` or
 `not_attending`. User deletion is restricted while referenced. Deleting a habit,
 study group, or event cascades to its dependent records.
 
-Only database setup is implemented. There is no Express HTTP server or
-`npm start` command yet.
+The personal progress API is implemented in `app.js`; `npm start` starts the
+normal server. See `../README.md` for authentication, the dashboard, tests, and integration.
 
-After these files are committed and pushed by the project owner, a teammate can
-clone the repository (or run `git pull` in an existing checkout), then run the
-commands above inside `server` to create their local database.
+Check out `shruti-auth-and-progress` as described in the root README, then run
+the commands above inside `server` to create your local database.
