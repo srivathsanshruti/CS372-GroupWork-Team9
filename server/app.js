@@ -3,6 +3,7 @@ const session = require('express-session');
 const crypto = require('node:crypto');
 const path = require('node:path');
 const { createPersonalRouter } = require('./personalRoutes');
+const { createGroupRouter } = require('./groupRoutes');
 const { query } = require('./lib/database');
 const { summarize } = require('./lib/progress');
 const { createAuthRouter } = require('./authRoutes');
@@ -34,6 +35,7 @@ function createApp(db, { sessionMiddleware, sessionSecret, authRouter } = {}) {
   }));
   // Teammates can replace this router while keeping the session userId contract.
   app.use('/api/auth', authRouter || createAuthRouter(db));
+  app.use('/api/groups', createGroupRouter(db));
   app.use('/api', createPersonalRouter(db));
   app.use('/api', (req, res) => res.status(404).json({ error: 'Endpoint not found.' }));
   app.use(express.static(path.join(__dirname, '../client/dist')));
