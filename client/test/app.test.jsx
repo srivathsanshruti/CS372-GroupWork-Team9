@@ -6,8 +6,9 @@ import App from '../src/App';
 const account={id:1,name:'Student',email:'student@example.test'};
 const progress={habits:[],history:[],percentage:0,expected:0,completions:0};
 const response=(status,body)=>({status,ok:status<400,json:async()=>body});
+beforeEach(()=>{window.location.hash='';});
 afterEach(()=>jest.restoreAllMocks());
-test('restores an existing session and sign-out returns to the login form', async()=>{
+test('restores an existing session on the homepage and sign-out returns to the login form', async()=>{
  const user=userEvent.setup();
  global.fetch=jest.fn(async(url,options={})=>{
   if(url.endsWith('/auth/logout')) return response(204,null);
@@ -15,7 +16,7 @@ test('restores an existing session and sign-out returns to the login form', asyn
   return response(200,progress);
  });
  render(<App/>);
- expect(await screen.findByRole('heading',{name:'My habits'})).toBeInTheDocument();
+ expect(await screen.findByRole('heading',{name:'Welcome back, Student'})).toBeInTheDocument();
  await user.click(screen.getByRole('button',{name:'Sign out'}));
  expect(await screen.findByRole('heading',{name:'Sign in'})).toBeInTheDocument();
  expect(screen.queryByText('No habits yet')).not.toBeInTheDocument();
@@ -33,6 +34,20 @@ test('sign-in reaches the actual personal dashboard with session-based requests'
  await user.type(screen.getByLabelText('Email'),'student@example.test');
  await user.type(screen.getByLabelText('Password'),'a-valid-password');
  await user.click(screen.getByRole('button',{name:'Sign in'}));
+ expect(await screen.findByRole('heading',{name:'Welcome back, Student'})).toBeInTheDocument();
+ await user.click(screen.getByRole('link',{name:'My habits'}));
  expect(await screen.findByText('No habits yet')).toBeInTheDocument();
  expect(screen.getByText('Student')).toBeInTheDocument();
+});
+test('homepage links reach the personal dashboard and the groups route', async()=>{
+ const user=userEvent.setup();
+ global.fetch=jest.fn(async url=>url.endsWith('/me')?response(200,account):response(200,progress));
+ render(<App/>);
+ await screen.findByRole('heading',{name:'Welcome back, Student'});
+ await user.click(screen.getByRole('link',{name:'Open my habits'}));
+ expect(await screen.findByRole('heading',{name:'My habits'})).toBeInTheDocument();
+ await user.click(screen.getByRole('link',{name:'Home'}));
+ expect(await screen.findByRole('heading',{name:'Welcome back, Student'})).toBeInTheDocument();
+ await user.click(screen.getByRole('link',{name:'Groups'}));
+ expect(await screen.findByRole('heading',{name:'Groups'})).toBeInTheDocument();
 });

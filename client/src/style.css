@@ -110,3 +110,55 @@
 .personal-app .auth-page > p { margin-bottom: 28px; }
 .personal-app .auth-switch { text-align: center; font-size: 14px; margin-top: 24px; }
 .personal-app .account-controls { display: flex; align-items: center; gap: 20px; }
+
+/* ---- Shared site header / nav ---- */
+.personal-app .header-inner { flex-wrap: wrap; }
+.personal-app .site-nav { display: flex; gap: 26px; margin-right: auto; margin-left: 36px; }
+.personal-app .site-nav a { padding: 6px 0; border-bottom: 2px solid transparent; color: var(--muted); font-size: 14px; text-decoration: none; }
+.personal-app .site-nav a:hover { color: var(--ink); }
+.personal-app .site-nav a.current { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+
+/* ---- Home page ---- */
+.personal-app .home-summary { color: var(--muted); font-size: 14px; margin: -10px 0 26px; }
+.personal-app .home-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 30px; align-items: start; }
+.personal-app .home-main { display: grid; gap: 30px; min-width: 0; }
+.personal-app .home-card { background: #fff; border: 1px solid var(--line); border-radius: 5px; padding: 22px 24px 8px; min-width: 0; }
+.personal-app .heading-tools { display: flex; align-items: center; gap: 16px; }
+.personal-app .heading-tools select { width: auto; max-width: 190px; }
+.personal-app .goal-list, .personal-app .event-list { list-style: none; padding: 0; margin: 0; }
+.personal-app .goal-list li { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-top: 1px solid #ededeb; }
+.personal-app .goal-main { flex: 1; min-width: 0; }
+.personal-app .goal-title { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-weight: 550; overflow-wrap: anywhere; }
+.personal-app .goal-meta { display: block; color: var(--muted); font-size: 12px; margin-top: 4px; }
+.personal-app .meter { display: flex; align-items: center; gap: 12px; width: 150px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.personal-app .meter .progress { flex: 1; }
+.personal-app .meter-label { font-size: 13px; color: var(--muted); min-width: 30px; text-align: right; }
+.personal-app .avatar { width: 36px; height: 36px; border-radius: 50%; background: #e8eef7; color: var(--accent); display: grid; place-items: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+.personal-app .group-tag, .personal-app .status-tag { font-size: 11px; font-weight: 500; border-radius: 3px; padding: 2px 7px; white-space: nowrap; }
+.personal-app .group-tag { background: #f0f0ee; color: var(--muted); }
+.personal-app .status-tag.done { background: #edf5ee; color: #347052; }
+.personal-app .status-tag.study { background: #e8eef7; color: var(--accent); }
+.personal-app .status-tag.social { background: #f6efe3; color: #8a5a14; }
+.personal-app .event { display: flex; gap: 16px; padding: 18px 0; border-top: 1px solid #ededeb; }
+.personal-app .date-block { width: 46px; height: 52px; flex-shrink: 0; border: 1px solid var(--line); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+.personal-app .date-block span { font-size: 11px; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.personal-app .date-block strong { font-size: 18px; font-weight: 600; }
+.personal-app .event-body { flex: 1; min-width: 0; }
+.personal-app .event-body h3 { font-size: 15px; margin: 0 0 6px; overflow-wrap: anywhere; }
+.personal-app .event-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0 0 6px; }
+.personal-app .event-meta:nth-of-type(2) { display: block; }
+.personal-app .rsvp-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.personal-app .rsvp-group .btn { padding: 5px 11px; font-size: 13px; }
+.personal-app .rsvp-status { font-size: 12px; color: var(--muted); margin: 8px 0 0; }
+@media (max-width: 900px) {
+  .personal-app .home-layout { grid-template-columns: 1fr; }
+  .personal-app .events-card { order: -1; }
+}
+@media (max-width: 600px) {
+  .personal-app .header-inner { padding-top: 12px; padding-bottom: 8px; }
+  .personal-app .site-nav { order: 3; width: 100%; margin: 0; }
+  .personal-app .home-card { padding-left: 16px; padding-right: 16px; }
+  .personal-app .goal-list li { flex-wrap: wrap; }
+  .personal-app .meter { width: 100%; }
+  .personal-app .section-heading { flex-wrap: wrap; }
+}

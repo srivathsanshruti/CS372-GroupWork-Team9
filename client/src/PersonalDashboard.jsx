@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPersonalApi, displayDate, localDate } from './api';
+import SiteHeader from './components/SiteHeader';
 import HabitForm from './components/HabitForm';
 import CompletionForm from './components/CompletionForm';
 import './style.css';
@@ -72,7 +73,7 @@ export default function PersonalDashboard({ apiBase = '/api', onSignIn, onSignOu
   const beginEdit = habit => { setEditor(habit); setDeleting(null); setError(''); setNotice(''); };
 
   return <div className="personal-app">
-    <header className="app-header"><div className="page-width header-inner"><a className="wordmark" href="/">Group Work<span className="wordmark-dot">.</span></a><div className="account-controls"><span className="account-name">{user?.name || ''}</span>{onSignOut && <button className="text-button" disabled={saving} onClick={onSignOut}>Sign out</button>}</div></div></header>
+    <SiteHeader current="dashboard" user={user} onSignOut={onSignOut} busy={saving} />
     <main className="page-width workspace">
       <nav className="personal-nav" aria-label="Personal pages">{[['habits','My habits'], ['progress','Progress'], ['history','History']].map(([key,label]) => <button key={key} className={tab === key ? 'current' : ''} aria-current={tab === key ? 'page' : undefined} onClick={() => { setTab(key); setNotice(''); }} disabled={saving}>{label}</button>)}</nav>
       <div className="page-heading"><div><p className="page-date">{new Date(today + 'T12:00:00').toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</p><h1>{tab === 'habits' ? 'My habits' : tab === 'progress' ? 'Progress' : 'Completion history'}</h1></div>{user && <button className="btn btn-primary" disabled={saving} onClick={() => { setTab('habits'); beginEdit({}); }}>+ Add habit</button>}</div>
