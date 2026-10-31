@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GroupsPage from '../src/GroupsPage';
 
@@ -105,4 +105,42 @@ test('a 401 hands control back to the app', async () => {
   render(<GroupsPage user={user} onSignedOut={onSignedOut} />);
   await waitFor(() => expect(onSignedOut).toHaveBeenCalled());
   expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+});
+
+test('a slow failing request for an old search does not show its error', async () => {
+  const actor = userEvent.setup();
+  let failOld;
+  global.fetch = jest.fn(async url => {
+    if (url === '/api/groups/courses') return response(200, []);
+    if (url === '/api/groups?q=a') return new Promise(resolve => { failOld = () => resolve(response(500, { error: 'Stale failure' })); });
+    if (url === '/api/groups?q=ab') return response(200, [group(5, { name: 'Ab Group' })]);
+    return response(200, list);
+  });
+  render(<GroupsPage user={user} />);
+  await screen.findByText('Algorithms Crew');
+  await actor.type(screen.getByLabelText('Search groups'), 'a');
+  await waitFor(() => expect(failOld).toBeDefined());
+  await actor.type(screen.getByLabelText('Search groups'), 'b');
+  expect(await screen.findByText('Ab Group')).toBeInTheDocument();
+  await act(async () => { failOld(); });
+  expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  expect(screen.getByText('Ab Group')).toBeInTheDocument();
+});
+
+test('the selected course stays visible after its last group is deleted', async () => {
+  const actor = userEvent.setup();
+  let courses = ['CHEM 1'];
+  list = [group(3, { name: 'Chem Lab', course: 'CHEM 1', creator_id: 1, is_member: true, is_owner: true })];
+  global.fetch = jest.fn(async (url, options = {}) => {
+    if (url === '/api/groups/courses') return response(200, courses);
+    if (options.method === 'DELETE') { courses = []; list = []; return response(204, null); }
+    return response(200, list);
+  });
+  render(<GroupsPage user={user} />);
+  await screen.findByText('Chem Lab');
+  await actor.selectOptions(screen.getByLabelText('Course'), 'CHEM 1');
+  await actor.click(screen.getByRole('button', { name: 'Delete Chem Lab' }));
+  await actor.click(screen.getByRole('button', { name: 'Delete group' }));
+  expect(await screen.findByText('Chem Lab was deleted.')).toBeInTheDocument();
+  expect(screen.getByLabelText('Course')).toHaveValue('CHEM 1');
 });

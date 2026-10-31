@@ -40,13 +40,20 @@ export default function GroupsPage({ user, apiBase = '/api', onSignOut, onSigned
     if (query) params.set('q', query);
     if (course) params.set('course', course);
     if (mine) params.set('mine', '1');
-    const [list, courseList] = await Promise.all([api('/groups?' + params), api('/groups/courses')]);
-    if (mounted.current && version === requestVersion.current) { setGroups(list); setCourses(courseList); }
+    try {
+      const [list, courseList] = await Promise.all([api('/groups?' + params), api('/groups/courses')]);
+      if (mounted.current && version === requestVersion.current) { setGroups(list); setCourses(courseList); }
+    } catch (e) {
+      if (version === requestVersion.current) throw e;
+    }
   }, [api, query, course, mine]);
 
   useEffect(() => {
+    let active = true;
     setLoading(true); setError('');
-    reload().catch(handleError).finally(() => { if (mounted.current) setLoading(false); });
+    reload().catch(e => { if (active) handleError(e); })
+      .finally(() => { if (active && mounted.current) setLoading(false); });
+    return () => { active = false; };
   }, [reload, handleError]);
 
   async function mutate(work, success, afterSave) {
@@ -63,6 +70,9 @@ export default function GroupsPage({ user, apiBase = '/api', onSignOut, onSigned
   const remove = group => mutate(() => api(`/groups/${group.id}`, { method: 'DELETE' }), `${group.name} was deleted.`, () => setDeleting(null));
   const create = values => mutate(() => api('/groups', { method: 'POST', body: values }), 'Group created.', () => setCreating(false));
   const filtered = Boolean(query || course || mine);
+  // Keep the selected course visible even after its last group is gone, so
+  // the select never shows a different filter than the one being applied.
+  const courseOptions = course && !courses.includes(course) ? [course, ...courses] : courses;
 
   return <div className="personal-app">
     <SiteHeader current="groups" user={user} onSignOut={onSignOut} busy={saving} />
@@ -80,7 +90,7 @@ export default function GroupsPage({ user, apiBase = '/api', onSignOut, onSigned
           <label className="visually-hidden" htmlFor="group-course-filter">Course</label>
           <select id="group-course-filter" className="form-select" value={course} onChange={event => setCourse(event.target.value)}>
             <option value="">All courses</option>
-            {courses.map(name => <option key={name} value={name}>{name}</option>)}
+            {courseOptions.map(name => <option key={name} value={name}>{name}</option>)}
           </select>
           <label className="group-mine"><input type="checkbox" checked={mine} onChange={event => setMine(event.target.checked)} /> My groups only</label>
         </div>
