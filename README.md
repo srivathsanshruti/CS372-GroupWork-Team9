@@ -114,7 +114,7 @@ Errors use `{ "error": "message" }`.
 | POST | `/api/habits/:id/completions` | `{completed_date:"YYYY-MM-DD"}` → 201; duplicate → 409 |
 | DELETE | `/api/habits/:id/completions/:date` | Undo owned completion, 204 |
 | GET | `/api/groups?q=&course=&mine=1` | Groups sorted by name, at most 100 |
-| GET | `/api/groups/courses` | Distinct course names, for filter menus |
+| GET | `/api/groups/courses` | Course names, one per course ignoring case |
 | POST | `/api/groups` | `{name,course,description,meeting_info}`, returns the group, 201; creator joins |
 | GET | `/api/groups/:id` | One group; includes `members` only for members |
 | PUT | `/api/groups/:id` | Same fields as create, creator only, 200 |
@@ -143,6 +143,7 @@ computed for the signed-in user. `GET /api/groups/:id` adds `members`
 List filters can be combined. `q` matches the name, course or description as a
 literal substring (`%` and `_` are not wildcards). `course` is an exact,
 case-insensitive match. `mine=1` (or `true`) keeps only groups the viewer is in.
+`q` is limited to 100 characters and `course` to 40; longer values return 400.
 
 Names are 1 to 100 trimmed characters. Course (up to 40), description (up to
 1000) and meeting info (up to 200) are optional; blank values are stored as null.
@@ -200,12 +201,15 @@ npm test
 npm run build
 ```
 
-42 tests: 28 backend and 14 frontend. Tests use isolated in-memory databases and
+79 tests: 49 backend and 30 frontend. Tests use isolated in-memory databases and
 synthetic form inputs, never the real local database. They cover auth cookies,
 password hashing, invalid login, duplicate email, logout/cookie replay, persisted
 sessions/expiry, real two-account data isolation, date math, habit CRUD, undo,
-validation, reporting filters, and frontend error handling.
+validation, reporting filters, group access rules, search and filters,
+join/leave, and frontend error handling.
 
 Manual check: register, add a habit, complete it, inspect progress/history,
 refresh, sign out, sign in again, then register a second account and verify it
-starts empty.
+starts empty. For groups, create one with the first account, then with the
+second account search for it, join, leave, and confirm that Delete is shown
+only to the creator.

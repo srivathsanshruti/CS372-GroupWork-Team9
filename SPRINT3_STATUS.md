@@ -18,9 +18,17 @@ This branch includes the integrated authentication implementation. Review and
 reconcile overlapping work before merging. Teammates' React pages can reuse the
 API contract in README.md rather than duplicating authentication logic.
 
+Groups (added on `brandon-homepage`, October 31):
+- Group create, browse, search, course filter, join/leave, edit and delete APIs
+  under `/api/groups`, with creator-only edits and member-only member lists.
+- Reusable SQL helpers in `server/lib/groups.js`.
+- Groups page at `#/groups` with search, filters, create form and join/leave.
+- 79 passing tests (49 backend, 30 frontend) and a successful frontend build.
+
 Remaining Sprint 3 work:
-- Brandon: group creation, browsing, join/leave APIs and group pages/filtering.
-- Dhruvan: group authorization/validation, integration support and demo-environment check.
+- Brandon: review the groups work above against the original plan.
+- Dhruvan: integration support and demo-environment check.
+- Homepage: replace sample data with real habits, groups and events.
 - Everyone: integration, Jira updates and the midterm presentation/report.
 
 No demo accounts or bypass login routes are shipped. Register a real local account
