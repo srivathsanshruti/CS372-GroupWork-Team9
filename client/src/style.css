@@ -162,3 +162,20 @@
   .personal-app .meter { width: 100%; }
   .personal-app .section-heading { flex-wrap: wrap; }
 }
+
+/* ---- Groups page ---- */
+.personal-app .group-filters { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 18px; }
+.personal-app .group-filters input[type="search"] { flex: 1; min-width: 220px; }
+.personal-app .group-filters select { width: auto; max-width: 200px; }
+.personal-app .group-mine { display: flex; align-items: center; gap: 8px; font-size: 14px; white-space: nowrap; }
+.personal-app .group-mine input { accent-color: var(--accent); }
+.personal-app .group-list { list-style: none; padding: 0; margin: 0; }
+.personal-app .group-list li { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; padding: 18px 0; border-top: 1px solid var(--line); }
+.personal-app .group-body { flex: 1; min-width: 0; }
+.personal-app .group-body h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 16px; margin: 0 0 6px; overflow-wrap: anywhere; }
+.personal-app .group-description { font-size: 14px; margin: 0 0 6px; overflow-wrap: anywhere; }
+.personal-app .group-actions { flex-shrink: 0; padding-top: 2px; }
+@media (max-width: 600px) {
+  .personal-app .group-list li { flex-direction: column; gap: 10px; }
+  .personal-app .group-filters select { max-width: none; flex: 1; }
+}

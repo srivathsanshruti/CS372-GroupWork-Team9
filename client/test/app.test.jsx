@@ -41,7 +41,7 @@ test('sign-in reaches the actual personal dashboard with session-based requests'
 });
 test('homepage links reach the personal dashboard and the groups route', async()=>{
  const user=userEvent.setup();
- global.fetch=jest.fn(async url=>url.endsWith('/me')?response(200,account):response(200,progress));
+ global.fetch=jest.fn(async url=>url.endsWith('/me')?response(200,account):url.includes('/groups')?response(200,[]):response(200,progress));
  render(<App/>);
  await screen.findByRole('heading',{name:'Welcome back, Student'});
  await user.click(screen.getByRole('link',{name:'Open my habits'}));
@@ -50,4 +50,5 @@ test('homepage links reach the personal dashboard and the groups route', async()
  expect(await screen.findByRole('heading',{name:'Welcome back, Student'})).toBeInTheDocument();
  await user.click(screen.getByRole('link',{name:'Groups'}));
  expect(await screen.findByRole('heading',{name:'Groups'})).toBeInTheDocument();
+ expect(await screen.findByRole('heading',{name:'No groups yet'})).toBeInTheDocument();
 });
