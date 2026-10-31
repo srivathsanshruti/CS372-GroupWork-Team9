@@ -49,6 +49,8 @@ Vite proxies `/api` to the backend. Stop either server with Ctrl+C.
 - Habit creation, editing, deletion, daily/weekly schedules, and completion/undo.
 - Overall/per-habit progress and history with all-time, seven-day and thirty-day windows.
 - Server-side user ownership checks on every personal read and write.
+- Study groups: create, browse, search, filter by course, join, leave, edit and
+  delete, with creator-only edits and member-only member lists.
 
 ## Integrating teammates' work
 
@@ -71,8 +73,10 @@ To integrate the social pages:
 3. Reuse `createPersonalApi('/api')` from `client/src/api.js` for relative API
    requests and same-origin cookies. Use `GET /api/me` for the logged-in student;
    never use a browser-supplied user ID to authorize access.
-4. Add group/event Express routers in `server/app.js` after the existing session
-   middleware and before the `/api` 404 handler. Read `req.session.userId` and
+4. Add event Express routers in `server/app.js` after the existing session
+   middleware and before the `/api` 404 handler. The groups router
+   (`server/groupRoutes.js`) is already mounted at `/api/groups`, before the
+   personal router. Read `req.session.userId` and
    check group membership/ownership in every protected operation.
 5. Keep the shared schema in `server/schema.sql`. Run `npm run db:init` on each
    teammate's machine; their database/session secret should remain local.
@@ -109,6 +113,14 @@ Errors use `{ "error": "message" }`.
 | GET | `/api/progress?asOf=YYYY-MM-DD&from=YYYY-MM-DD` | `{asOf,from,expected,completions,percentage,habits,history}` |
 | POST | `/api/habits/:id/completions` | `{completed_date:"YYYY-MM-DD"}` → 201; duplicate → 409 |
 | DELETE | `/api/habits/:id/completions/:date` | Undo owned completion, 204 |
+| GET | `/api/groups?q=&course=&mine=1` | Groups sorted by name, at most 100 |
+| GET | `/api/groups/courses` | Distinct course names, for filter menus |
+| POST | `/api/groups` | `{name,course,description,meeting_info}`, returns the group, 201; creator joins |
+| GET | `/api/groups/:id` | One group; includes `members` only for members |
+| PUT | `/api/groups/:id` | Same fields as create, creator only, 200 |
+| DELETE | `/api/groups/:id` | Creator only; removes members, messages and events, 204 |
+| POST | `/api/groups/:id/members` | Join as the signed-in user, 201; already a member returns 409 |
+| DELETE | `/api/groups/:id/members/me` | Leave, 204; the creator gets 409 |
 
 Only registration/login/logout are public. All personal endpoints verify a
 numeric `req.session.userId` and an existing user. A nonexistent or another user's
@@ -120,6 +132,28 @@ lowercased. Registration passwords are at least eight characters, at most 72
 UTF-8 bytes (bcrypt's limit); password whitespace is not trimmed. The UI also
 requires matching confirmation. Failed registration/login attempts are limited
 to 20 per IP per 15 minutes; restart resets this single-process limiter.
+
+## Group behavior
+
+Every group response has `id, name, course, description, meeting_info,
+creator_id, creator_name, member_count, is_member, is_owner`. The last two are
+computed for the signed-in user. `GET /api/groups/:id` adds `members`
+(`id, name, joined_at`, no emails) when the viewer is a member.
+
+List filters can be combined. `q` matches the name, course or description as a
+literal substring (`%` and `_` are not wildcards). `course` is an exact,
+case-insensitive match. `mine=1` (or `true`) keeps only groups the viewer is in.
+
+Names are 1 to 100 trimmed characters. Course (up to 40), description (up to
+1000) and meeting info (up to 200) are optional; blank values are stored as null.
+The creator is added as the first member and cannot leave; they delete the group
+instead. Edits and deletes from anyone else return 403. Unknown or malformed
+group ids return 404. Membership is always taken from the session, never from
+the request body.
+
+SQL lives in `server/lib/groups.js` (`listGroups`, `getGroup`, `listMembers`,
+`listCourses`, `createGroup`, `updateGroup`, `deleteGroup`, `joinGroup`,
+`leaveGroup`) so other routers, such as events or the homepage, can reuse it.
 
 ## Session storage and local secrets
 
