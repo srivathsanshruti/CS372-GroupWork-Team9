@@ -55,9 +55,11 @@ function listMembers(db, groupId) {
     JOIN users u ON u.id = m.user_id WHERE m.group_id = ? ORDER BY m.joined_at, m.id`, [groupId]);
 }
 
+// Grouped case-insensitively to match the course filter, so "CS 372" and
+// "cs 372" appear once. MIN picks a stable spelling for each course.
 function listCourses(db) {
-  return query(db, 'all', `SELECT DISTINCT course FROM study_groups
-    WHERE course IS NOT NULL AND course <> '' ORDER BY course COLLATE NOCASE`)
+  return query(db, 'all', `SELECT MIN(course) AS course FROM study_groups
+    WHERE course IS NOT NULL AND course <> '' GROUP BY course COLLATE NOCASE ORDER BY course COLLATE NOCASE`)
     .then(rows => rows.map(row => row.course));
 }
 

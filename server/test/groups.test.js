@@ -177,3 +177,15 @@ test('personal routes still work alongside the groups router', async () => {
   expect((await request(appFor(null)).get('/api/habits')).status).toBe(401);
   expect((await request(appFor(1)).get('/api/groupsx')).status).toBe(404);
 });
+
+test('courses are listed once regardless of case', async () => {
+  await query(db, 'run', "INSERT INTO study_groups(creator_id,name,course) VALUES (1,'Lower','cs 372'),(1,'Upper','CS 260')");
+  expect((await request(appFor(1)).get('/api/groups/courses')).body).toEqual(['CS 260', 'CS 372']);
+});
+
+test('search text over the limit is rejected instead of ignored', async () => {
+  const app = appFor(1);
+  expect((await request(app).get('/api/groups?q=' + 'z'.repeat(101))).status).toBe(400);
+  expect((await request(app).get('/api/groups?course=' + 'C'.repeat(41))).status).toBe(400);
+  expect((await request(app).get('/api/groups?q=' + 'z'.repeat(100))).body).toEqual([]);
+});

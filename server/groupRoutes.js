@@ -23,8 +23,14 @@ function readGroupFields(body) {
 // Route ids must be positive integers; anything else is treated as not found.
 const parseId = value => /^[1-9]\d{0,15}$/.test(value) && Number.isSafeInteger(Number(value)) ? Number(value) : null;
 
-// Query strings can repeat keys (?q=a&q=b); only single string values are accepted.
-const queryText = (value, max) => typeof value === 'string' && value.trim() && value.trim().length <= max ? value.trim() : '';
+// Query strings can repeat keys (?q=a&q=b); only single string values are used.
+// Returns null for text over the limit so the caller can reject it rather
+// than silently dropping the filter and returning every group.
+function queryText(value, max) {
+  if (typeof value !== 'string') return '';
+  const trimmed = value.trim();
+  return trimmed.length > max ? null : trimmed;
+}
 
 // Mount after the session middleware and before the personal router, which
 // would otherwise answer unauthenticated /api/groups requests itself.
@@ -50,6 +56,7 @@ function createGroupRouter(db) {
       course: queryText(req.query.course, LIMITS.course),
       mine: req.query.mine === '1' || req.query.mine === 'true'
     };
+    if (filters.q === null || filters.course === null) return res.status(400).json({ error: 'Search text is limited to 100 characters and course to 40.' });
     res.json(await groups.listGroups(db, req.currentUser.id, filters));
   });
   router.get('/courses', async (req, res) => res.json(await groups.listCourses(db)));
